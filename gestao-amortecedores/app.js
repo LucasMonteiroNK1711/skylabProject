@@ -24,6 +24,11 @@ app.get('/', (req, res) => {
     res.send('Bem-vindo ao sistema de gestão de linha de produção!');
 });
 
+const services = require('./routes/services');
+
+// Usar as rotas de serviços
+app.use('/api/services', services);
+
 
 // Porta do servidor
 const PORT = process.env.PORT || 5000;
