@@ -1,21 +1,25 @@
 require('dotenv').config();
 const express = require('express');
-const mongoose = require('moongoose');
+const mongoose = require('mongoose');
 const app = express();
+
+// Importat as rotas de autenticação
+const authRoutes = require('./routes/auth');
 
 // Middlewares
 app.use(express.json()); //Para trabalhar com JSON
 
-//Conectar ao MongoDB
-mongoose.connect(process.env.MONGO_URL, {
-    useNewUrlParser: true,
-    userUnifiedTopology: true,
+// Conectar ao MongoDB
+mongoose.connect('mongodb://localhost:27017/gestao_amortecedores', {
+    serverSelectionTimeoutMS: 30000
 })
-
     .then(() => console.log('conectado ao MongoDB'))
     .catch((err) => console.log('Erro ao conectar ao MongoDB:', err));
 
+
 // Rotas
+app.use('/api/auth', authRoutes);
+
 app.get('/', (req, res) => {
     res.send('Bem-vindo ao sistema de gestão de linha de produção!');
 });
