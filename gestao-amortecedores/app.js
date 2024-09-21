@@ -29,6 +29,13 @@ const services = require('./routes/services');
 // Usar as rotas de serviços
 app.use('/api/services', services);
 
+const employees = require('./routes/employees');
+const clients = require('./routes/clients');
+
+// Usar as rotas de funcionários e clientes
+app.use('/api/employees', employees);
+app.use('/api/clients', clients);
+
 
 // Porta do servidor
 const PORT = process.env.PORT || 5000;
