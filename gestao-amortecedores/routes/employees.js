@@ -2,10 +2,11 @@ const express = require('express');
 const bycrypt = require('bcryptjs');
 const User = require('../models/user');
 const auth = require('../routes/auth');
+const role = require('../middleware/role')
 const router = express.Router();
 
 // Criar um novo funcionário (apenas Admins)
-router.post('/', auth, async (req, res) => {
+router.post('/', [auth, role(['admin'])], async (req, res) => {
     const { name, email, password, role } = req.body;
 
     try {
@@ -44,8 +45,8 @@ router.get('/', auth, async (req, res) => {
     }
 });
 
-// Atualizar um funcionário
-router.put('/:id', auth, async (req, res) => {
+// Atualizar um funcionário (apenas Admins)
+router.put('/:id', [auth, role(['admin'])], async (req, res) => {
     const { name, email, role } = req.body;
 
     try {
@@ -68,8 +69,8 @@ router.put('/:id', auth, async (req, res) => {
     }
 });
 
-// Deletar um funcionário
-router.delete('/:id', auth, async (req, res) => {
+// Deletar um funcionário (apenas Admins)
+router.delete('/:id', [auth, role(['admin'])], async (req, res) => {
     try {
         let user = await User.findById(req.params.id);
 
@@ -77,7 +78,7 @@ router.delete('/:id', auth, async (req, res) => {
             return res.status(404).json({ msg: 'Funcionário não encontrado' });
         }
 
-        await user.remove();
+        await user.deleteOne({ _id: req.params.id });
         res.json({ msg: 'Funcionário removido' });
     } catch (err) {
         console.error(err.message);
