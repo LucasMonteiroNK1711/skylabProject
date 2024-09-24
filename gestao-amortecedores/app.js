@@ -36,6 +36,10 @@ const clients = require('./routes/clients');
 app.use('/api/employees', employees);
 app.use('/api/clients', clients);
 
+const tasks = require('./routes/tasks');
+app.use('/api/tasks', tasks);
+
+
 
 // Porta do servidor
 const PORT = process.env.PORT || 5000;
